@@ -1,58 +1,41 @@
-**Trilha de aprendizado guiada por perguntas** (prompts). Se você me fizer cada um deles na sequência, vai fechar o ciclo completo de como conectar e usar bancos de dados em Spring Boot.
+## **Nível 1 – CRUD básico com Spring Data JPA**
+
+1. Crie uma entidade Java chamada Produto com os campos id, nome e preco, usando anotações JPA. Explique cada anotação que você usou (como @Entity, @Id, @GeneratedValue, @Column).
+2. Crie um repository para a entidade Produto estendendo JpaRepository. Liste os métodos CRUD já disponíveis por padrão (findAll, findById, save, deleteById) e explique como o Spring os implementa automaticamente.
+3. Crie um service ProdutoService e injete o ProdutoRepository. Implemente métodos que chamam os métodos CRUD do repository e explique o papel do service na arquitetura.
+4. Crie um controller ProdutoController que exponha endpoints REST para listar, criar, atualizar e deletar produtos. Faça exemplos de requisições GET, POST, PUT e DELETE.
 
 ---
 
-(ordem sugerida para que seu aprendizado seja progressivo)
+## **Nível 2 – Consultas simples e derivadas**
 
-### 🔹 Etapa 1 – Fundamentos
-
-1. **"O que é uma fonte de dados no Spring Boot e como o framework cria e gerencia DataSources automaticamente?"**
-2. **"Quais são as formas de configurar um DataSource no Spring Boot (application.properties, JNDI, múltiplas fontes) e quando usar cada uma?"**
-3. **"Quais são as diferenças práticas entre configurar banco de dados no `application.properties` e via JNDI em servidores de aplicação?"**
+1. Crie métodos no repository como findByNome, findByPrecoGreaterThan e findByNomeContaining. Explique como o Spring converte os nomes dos métodos em queries SQL.
+2. Crie um método que busque produtos por faixa de preço usando a anotação @Query e linguagem JPQL. Explique a diferença entre JPQL e SQL nativo.
+3. Implemente métodos que retornem produtos ordenados por nome ou preço. Adicione paginação usando Pageable. Explique como funciona internamente.
 
 ---
 
-### 🔹 Etapa 2 – Conexão e Configuração
+## **Nível 3 – Relacionamentos e Modelagem**
 
-4. **"Como configurar minha aplicação Spring Boot para se conectar a um banco de dados PostgreSQL (ou outro banco que eu escolher)?"**
-5. **"O que é um pool de conexões e como o Spring Boot utiliza HikariCP por padrão?"**
-6. **"Como configurar múltiplas conexões com bancos de dados diferentes no mesmo projeto Spring Boot?"**
-
----
-
-### 🔹 Etapa 3 – Acesso a Dados no Spring
-
-7. **"Quais são as opções de acesso a dados que o Spring Boot oferece (JdbcTemplate, Spring Data JPA, MyBatis, etc.)?"**
-8. **"Como usar JdbcTemplate para executar queries SQL diretamente em uma aplicação Spring Boot?"**
-9. **"Como funciona o Spring Data JPA e como ele se integra com Hibernate para mapear entidades?"**
+1. Crie uma entidade Categoria e estabeleça relacionamento OneToMany com Produto. Configure mapeamento bidirecional com ManyToOne no Produto. Explique como o Hibernate gerencia essas associações.
+2. Crie uma entidade Tag e relacione produtos e tags com ManyToMany. Explique a tabela de junção criada pelo Hibernate e como controlar fetch e cascade.
+3. Crie um método no repository para buscar produtos de uma determinada categoria ou com uma tag específica usando JPQL. Explique como o join funciona no JPA.
 
 ---
 
-### 🔹 Etapa 4 – Criando e Manipulando Dados
+## **Nível 4 – Transações, exceções e performance**
 
-10. **"Como criar uma entidade JPA e um repositório no Spring Boot para salvar, buscar e deletar registros?"**
-11. **"Como personalizar queries no Spring Data JPA usando métodos derivados e a anotação @Query?"**
-12. **"Como usar o schema.sql e data.sql para popular o banco automaticamente no startup da aplicação?"**
-
----
-
-### 🔹 Etapa 5 – Boas Práticas e Casos Especiais
-
-13. **"Como configurar migrações de banco de dados em Spring Boot com Flyway ou Liquibase?"**
-14. **"Quais são as melhores práticas para separar credenciais do banco em produção (Vault, variáveis de ambiente, Config Server)?"**
-15. **"Quando faz sentido usar JNDI DataSource em aplicações Spring Boot modernas?"**
-16. **"Como implementar testes de integração com banco de dados em projetos Spring Boot?"**
+1. Configure um método de service com @Transactional que atualize múltiplos produtos em uma operação. Explique como o Spring gerencia commit e rollback.
+2. Mostre como capturar exceções como DataIntegrityViolationException ou EntityNotFoundException e retornar mensagens apropriadas para o cliente REST.
+3. Explique a diferença entre fetch eager e lazy. Crie exemplos práticos mostrando como consultas podem gerar N+1 queries e como resolver.
 
 ---
 
-Se você me fizer todos esses prompts (nessa ordem), no fim você vai:
+## **Nível 5 – Avançado: Criteria API e Native Queries**
 
-* Saber **como o Spring Boot gerencia conexões de banco**.
-* Saber configurar banco **direto via properties** e também **via JNDI**.
-* Entender **pools de conexão** e como o Boot usa HikariCP.
-* Usar **JdbcTemplate e JPA/Hibernate** para CRUD real.
-* Dominar **migrations e boas práticas de credenciais**.
-* Estar pronto para **projetos reais Spring Boot + banco de dados**.
+1. Crie uma busca dinâmica de produtos usando Criteria API, permitindo filtrar por nome, preço e categoria. Explique como a API cria consultas tipadas.
+2. Crie métodos que executem queries SQL nativas no PostgreSQL usando @Query(nativeQuery=true). Explique quando é melhor usar nativo em vez de JPQL.
+3. Mostre como criar consultas que retornam DTOs customizados ao invés da entidade completa. Explique a vantagem em performance e desacoplamento.
 
 ---
 

@@ -37,9 +37,9 @@ O alto acoplamento acontece quando as classes do seu projeto dependem demais uma
 
 ## O Princípio de Inversão de Dependências
 
-Para expor o problema do acoplamento, vamos implementar um ETL simpoles: uma aplicação de integração.
+Para expor o problema do acoplamento, vamos implementar um ETL simples: uma aplicação de integração.
 
-> ETL (Extract, Transform, Load) é um sistema de integração de dados que coleta informações de várias fontes de dados, as limpa e organiza de acordo com regras de negócio, e as carrega num repositório centralizado, como um banco de dados (ETLs comuns costumam ser centralizados em um data warehouse ou data lake). Este processo é essencial para consolidar dados britos para análises, relatórios e tomada de decisões.
+> ETL (Extract, Transform, Load) é um sistema de integração de dados que coleta informações de várias fontes de dados, as limpa e organiza de acordo com regras de negócio, e as carrega num repositório centralizado, como um banco de dados (ETLs comuns costumam ser centralizados em um data warehouse ou data lake). Este processo é essencial para consolidar dados brutos para análises, relatórios e tomada de decisões.
 
 Nosso ETL será formado basicamente por três classes:
 
@@ -53,7 +53,7 @@ Nosso ETL será formado basicamente por três classes:
 
 ### O que é um `DAO`?
 
-DAO significa *Data Acess Object*. É um padrão de design que tem por objetivo separar a lógica de negócio da aplicação da lógica de acessa aos dados. Ele atua então como uma camada específica para persistência de dados.
+DAO significa *Data Acess Object*. É um padrão de design que tem por objetivo separar a lógica de negócio da aplicação da lógica de acesso aos dados. Ele atua então como uma camada específica para persistência de dados.
 
 * O código de acesso a dados implementa uma interface genérica para interagir com os dados, escondendo os detalhes internos de como os dados são armazenados e recuperados
 
@@ -241,7 +241,7 @@ Ele registra esses beans em um "mapa interno" (`BeanFactory` ou `ApplicationCont
 
 Quando precisar criar `PagamentoService`, o container vê que o construtor exige um `GatewayPagamento`. Em seguida, ele procura no seu mapa e encotra o bean correspondente.
 
-O container instancia `GatewayPagamento` primeiro, depois passa essa inst"ancia ao construtor de `PagamentoService`
+O container instancia `GatewayPagamento` primeiro, depois passa essa instância ao construtor de `PagamentoService`
 
 **E com mais de uma implementação de Gateway?**
 
