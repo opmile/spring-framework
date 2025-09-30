@@ -238,7 +238,6 @@ Quando você coloca `@GetMapping` sem nada, ele se aplica exatamente a `/usuario
 
 ## Parâmetros via Path Variables e Query Params
 
-Boa pergunta, porque isso é uma das bases do mapeamento de endpoints em REST.
 No Spring MVC (e portanto no Spring Boot) você pode receber parâmetros de duas formas principais:
 
 ---
@@ -391,11 +390,6 @@ public Usuario buscarPorId(@PathVariable Long id) {
 * Cliente envia objeto → precisa serializar antes de mandar
 * Servidor recebe JSON → precisa desserializar para objeto Java (Jackson faz com `@RequestBody`).
 * Servidor responde com objeto Java → precisa serializar de novo em JSON.
-
----
-
-Boa! Esse ponto é muito importante em aplicações Spring Boot, porque a forma ingênua (ficar colocando `try/catch` dentro de cada controller) vira um inferno de manter.
-É aí que entram **`@ControllerAdvice`** e **`@ExceptionHandler`**.
 
 ---
 
@@ -620,6 +614,135 @@ Ou seja, você está **separando a preocupação do tratamento de erro do códig
 * Você não escreve pointcuts manualmente, mas o Spring internamente faz algo parecido ao interceptar o fluxo de execução do controller.
 
 ---
+
+## Mantendo o Controller limpo
+
+O ponto chave: **deixar o controller limpo**. 
+
+O controller não devia ficar se preocupando com `try/catch`, muito menos com mensagem de erro ou status HTTP. Isso é papel de um “tradutor” global de exceções.
+
+---
+
+### 1. O desenho ideal
+
+* **Service**: aplica a regra de negócio e lança exceções (personalizadas ou não).
+* **Controller**: só recebe requisição → chama service → devolve resposta.
+* **@RestControllerAdvice**: intercepta exceções que subirem e traduz para uma resposta HTTP adequada.
+
+---
+
+### 2. Criando uma exception customizada
+
+Exemplo: você tem uma regra onde não pode adotar um pet que já foi adotado.
+
+```java
+public class PetJaAdotadoException extends RuntimeException {
+    public PetJaAdotadoException(String message) {
+        super(message);
+    }
+}
+```
+
+---
+
+### 3. Usando a exception no Service
+
+No service, você lança essa exception quando a regra for violada:
+
+```java
+@Service
+public class AdocaoService {
+
+    private final PetRepository petRepository;
+    private final AdocaoRepository adocaoRepository;
+
+    public AdocaoService(PetRepository petRepository, AdocaoRepository adocaoRepository) {
+        this.petRepository = petRepository;
+        this.adocaoRepository = adocaoRepository;
+    }
+
+    @Transactional
+    public void adotar(Long petId, Long tutorId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new IllegalArgumentException("Pet não encontrado"));
+
+        if (pet.isAdotado()) {
+            throw new PetJaAdotadoException("Este pet já foi adotado.");
+        }
+
+        // lógica de salvar adoção...
+    }
+}
+```
+
+---
+
+### 4. Criando o “tradutor” global com `@RestControllerAdvice`
+
+Aqui você centraliza o tratamento:
+
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(PetJaAdotadoException.class)
+    public ResponseEntity<ErroResponse> handlePetJaAdotado(PetJaAdotadoException ex) {
+        ErroResponse erro = new ErroResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErroResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        ErroResponse erro = new ErroResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+}
+```
+
+Classe de resposta de erro (pode ser um record, se preferir):
+
+```java
+public class ErroResponse {
+    private int status;
+    private String mensagem;
+
+    public ErroResponse(int status, String mensagem) {
+        this.status = status;
+        this.mensagem = mensagem;
+    }
+
+    // getters e setters
+}
+```
+
+---
+
+### 5. Controller limpo
+
+Repara como o controller agora só se preocupa com a requisição/resposta normal. Se algo der errado, a exception sobe e o `@RestControllerAdvice` resolve:
+
+```java
+@RestController
+@RequestMapping("/adocoes")
+public class AdocaoController {
+
+    private final AdocaoService adocaoService;
+
+    public AdocaoController(AdocaoService adocaoService) {
+        this.adocaoService = adocaoService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> adotar(@RequestParam Long petId, @RequestParam Long tutorId) {
+        adocaoService.adotar(petId, tutorId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+}
+```
+
+---
+
+
 
 
 

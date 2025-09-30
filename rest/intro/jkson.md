@@ -1,9 +1,5 @@
 # Jackson e Spring Boot
 
-1. **O que você fazia manualmente estudando só o Jackson**
-2. **O que o Spring MVC já traz antes do Spring Boot**
-3. **O que o Spring Boot adiciona de abstração e conveniência**
-
 ---
 
 ## 1. Quando você estudou Jackson isoladamente
@@ -106,10 +102,6 @@ Mas veja: **essa integração era configurável, mas você ainda precisava regis
 * Você **não precisa registrar manualmente os módulos** comuns — o Boot cuida disso.
 * Configurações comuns ficam centralizadas em `application.properties` em vez de espalhadas no código.
 * Extensões/correções podem ser feitas de forma declarativa via Beans ou Customizers.
-
----
-
-> **Quando você usava Jackson sozinho, você era o maestro; com Spring MVC você já tinha uma orquestra, mas precisava afinar alguns instrumentos; com Spring Boot, a orquestra já vem afinada e você só diz o tom que quer tocar.**
 
 ---
 

@@ -3,7 +3,7 @@
 
 ### Servidor de aplicações
 
-Um servidor de aplicações (ou application server) é uma plataforma de software que fornece um ambiente para executar e gerir aplicações, atuando como intermediário entre os clientes e os sistemas de back-end. 
+Um servidor de aplicações (ou *application server*) é uma plataforma de software que fornece um ambiente para executar e gerir aplicações, atuando como intermediário entre os clientes e os sistemas de back-end. 
 
 Ele hospeda, executa e entrega software aos utilizadores através da rede, sendo responsável por tarefas como segurança, balanceamento de carga e tratamento de exceções, permitindo que os desenvolvedores se concentrem na lógica de negócios da aplicação em vez da infraestrutura subjacente. 
 
@@ -37,7 +37,7 @@ Funciona como um componente Java que é executado e gerido por um container de s
 
 * O Spring MVC é contruído em cima da API de servlets. Ele registra um `DispatcherServlet`, que funciona como um front controller. Esse servlet intercepta todas as requisições, faz o roteamento para seus controllers, chama os serviços e retorna a resposta.
 
-* Então quando um cliente faz uma requisição web, o container de servlets intercepta esse requisição, injeta o servlet para processando e por fim gerar uma resposta.
+* Então quando um cliente faz uma requisição web, o container de servlets intercepta essa requisição, injeta o servlet para processamento e por fim gerar uma resposta.
 
 ### Apache Tomcat
 
