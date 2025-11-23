@@ -129,5 +129,43 @@ public int hashCode() {
 
 O `31` no `hashCode()` é só um atalho para não ter que pensar muito. É seguro, mas se você quiser ser mais correto e performático, use o id no cálculo do hash.
 
+## Necessidade de Uso
+
+O `equals()` e o `hashCode()` servem principalmente pra quando sua entidade vai ser usada em **estruturas que dependem de igualdade**, tipo `Set`, `Map` ou em comparações entre instâncias gerenciadas pelo JPA.
+
+Então:
+
+* **Se a entidade vai ser gerenciada pelo JPA (ou seja, é anotada com `@Entity`)**, é uma boa prática **implementar `equals` e `hashCode`**, mesmo que ela não tenha um `Set` de relacionamentos.
+  Isso evita bugs sutis quando o Hibernate tenta comparar instâncias diferentes do mesmo registro do banco.
+
+* **Mas cuidado:** o jeito *como* você implementa importa.
+  A recomendação mais segura é basear esses métodos **no identificador natural ou no ID gerado apenas depois de persistido** — nunca em atributos mutáveis.
+  Ou seja, algo como:
+
+  ```java
+  @Override
+  public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Usuario)) return false;
+      Usuario other = (Usuario) o;
+      return id != null && id.equals(other.id);
+  }
+
+  @Override
+  public int hashCode() {
+      return Objects.hash(id);
+  }
+  ```
+
+* **Se a classe não é usada em coleções e não participa de comparações**, dá pra pular — o JPA não exige isso sempre.
+  Mas manter o padrão ajuda na consistência e evita surpresas no futuro, caso você adicione um relacionamento `@OneToMany` depois.
+
+---
+
+* Entidades JPA → normalmente **sim**.
+* Classes DTO, Record, etc. → só se precisar.
+
+
+
 
 
