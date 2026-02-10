@@ -19,10 +19,6 @@ Depois disso, você já pode:
 
 ---
 
-Beleza, vamos montar isso de um jeito direto, técnico na medida e sem frescura. A ideia é você realmente *entender* como tudo se encaixa no fluxo de uma API Spring — desde a entrada no controller até a lógica de domínio no service.
-
----
-
 ### O que é o **Spring Validation**
 
 Spring Validation é o mecanismo do Spring que integra:
@@ -67,8 +63,6 @@ Essas validações são sempre “estáticas”: elas não dependem do banco, do
 ---
 
 ### Validações *de domínio* (lógica de negócio)
-
-Agora vem a parada mais séria.
 
 As validações de domínio pertencem ao **core da lógica** do seu sistema, e por isso **sempre ficam na camada de serviço** (ou no domínio, se você for mais purista).
 
@@ -457,8 +451,6 @@ Validar CPF, CNPJ, CEP, ou um formato não coberto por regex simples.
 ---
 
 # Mais sobre Validações
-
-Beleza, vamos destrinchar isso com calma e sem frescura. Você tem três jeitos de validar o domínio:
 
 1. **Validação no domínio (métodos dentro da entidade)**
 2. **Validação no serviço de domínio (DomainService)**

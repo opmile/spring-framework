@@ -295,8 +295,8 @@ verify(userRepository).findById(1L);
 // Estilo BDD
 given(userRepository.findById(1L)).willReturn(Optional.of(user));
 User result = service.findUser(1L);
-then(userRepository).should().findById(1L);
 assertThat(result).isEqualTo(user);
+then(userRepository).should().findById(1L);
 ```
 
 Percebe como o segundo exemplo **lê como uma frase**?
@@ -320,6 +320,14 @@ Essa coerência ajuda em times que usam uma linguagem mais descritiva nos testes
 
 O `ArgumentCaptor` serve pra verificar **com quais valores** um mock foi chamado.
 Enquanto `verify()` confirma que a interação aconteceu, o captor permite **analisar o conteúdo** dessa interação.
+
+* o objeto é construído dentro do método
+
+* o método não retorna nada
+
+* você precisa validar estado interno do argumento
+
+* há transformação de dados antes da chamada
 
 No estilo BDD, isso vira:
 
@@ -838,10 +846,3 @@ ordem.verify(usuarioService).atualizarStatus(usuario);
 * Se você quer saber **em que ordem foram chamadas**, use `InOrder` + `verify()`.
 
 ---
-
-
-
-
-
-
-

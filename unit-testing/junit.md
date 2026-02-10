@@ -21,15 +21,21 @@ O **JUnit 5** organiza o ciclo de vida de um teste de forma que você possa prep
 Para cada classe de teste:
 
 1. **Antes de tudo (`@BeforeAll`)** → executa **uma vez** antes de qualquer teste da classe. Ideal para configurar recursos caros ou globais (como conexões com banco ou arquivos de configuração).
+
 2. **Antes de cada teste (`@BeforeEach`)** → executa **antes de cada método de teste**. Útil para preparar o estado do objeto ou mocks de forma limpa.
+
 3. **Teste (`@Test`)** → o método que efetivamente testa uma funcionalidade.
+
 4. **Depois de cada teste (`@AfterEach`)** → executa **após cada método de teste**. Bom para limpar estado ou recursos criados no `@BeforeEach`.
+
 5. **Depois de tudo (`@AfterAll`)** → executa **uma vez** depois de todos os testes. Para liberar recursos globais, fechar conexões etc.
 
 ---
 
 * `@BeforeAll` e `@AfterAll` **devem ser estáticos**, porque ainda não existe instância da classe de teste quando são executados.
+
 * `@BeforeEach` e `@AfterEach` **são instanciados por teste**, então você sempre começa com objetos “limpos” em cada método.
+
 * Essa separação garante **isolamento entre testes**, evitando efeitos colaterais de estado compartilhado.
 
 ---
@@ -333,8 +339,6 @@ assertArrayEquals(esperado, atual);
 
 #### Diferenciando imports
 
-Boa observação — isso é detalhe pequeno, mas muda o estilo do código e o que o compilador precisa saber.
-
 ---
 
 1. **Forma “normal”**
@@ -479,7 +483,7 @@ Quanto mais nuances você cobrir, mais confiança você tem de que a lógica se 
 
 ## Padrões de Nomenclatura de Métodos
 
-Boa — o `@DisplayName` entra justamente quando você quer **deixar o método com um nome técnico**, mas ainda **mostrar uma descrição legível** nos relatórios de teste.
+O `@DisplayName` entra justamente quando você quer **deixar o método com um nome técnico**, mas ainda **mostrar uma descrição legível** nos relatórios de teste.
 
 Em outras palavras:
 

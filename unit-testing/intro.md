@@ -112,8 +112,6 @@ Aqui:
 
 ## Integração `@SpringBootTest` vs. Unitário `Mockito`
 
-Boa — essa é uma dúvida que separa quem só “roda o teste” de quem começa a **entender** o que está sendo testado.
-
 A diferença é de **intenção e escopo**:
 
 ---
